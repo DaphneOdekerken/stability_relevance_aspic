@@ -37,7 +37,12 @@ head(d1,deception).
 body(d1,too_cheap).
 head(d2,not_deception).
 body(d2,trusted).
+head(d3,deception).
+head(d3,typosquatting).
 
 preferred(d0,d0).
 preferred(d1,d1).
 preferred(d2,d2).
+preferred(d3,d3).
+
+topic(deception).

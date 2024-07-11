@@ -49,7 +49,7 @@ def generate_police_dataset():
                 knowledge_base_ordinary_premises=[])
         write_path = str(
             pathlib.Path(__file__).parent.parent.parent / 'dataset' /
-            'police' / ('police_7axioms_' + str(generated_index) + '.lp'))
+            'police' / ('police_60lit_' + str(generated_index) + '.lp'))
         fraud_topic = iat.argumentation_system.language['fraudarticle326']
         write_to_lp_file(iat_with_axioms, write_path, [fraud_topic])
 

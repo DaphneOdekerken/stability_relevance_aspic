@@ -6,11 +6,12 @@ import clingo
 PATH_TO_ENCODINGS = pathlib.Path(__file__).parent / 'encodings'
 
 
-class Solver:
+class RelevanceSolver:
     def __init__(self):
         # Queryables and initial (not guessed) axioms parsed from the input.
         self.queryables = set()
         self.initial_axioms = set()
+        self.topic = None
 
         # Clingo controls
         self.guess_control = None
@@ -64,6 +65,8 @@ class Solver:
                 self.initial_axioms.add(line.split('(')[1].split(')')[0])
             elif line.startswith('queryable'):
                 self.queryables.add(line.split('(')[1].split(')')[0])
+            elif line.startswith('topic'):
+                self.topic = line.split('(')[1].split(')')[0]
 
     def _setup_clingo_relevance(self, iat_file,
                                 with_preferences: bool = False):
@@ -101,7 +104,7 @@ class Solver:
         # Remove assumed axioms from possible previous runs.
         self.clean()
 
-    def relevance_all_incremental(self, input_file, topic, prefs,
+    def relevance_all_incremental(self, input_file, prefs,
                                   status='defended'):
         # Parse input.
         self._parse_input(input_file)
@@ -109,12 +112,12 @@ class Solver:
         # Setup controls.
         self._setup_clingo_relevance(input_file, prefs)
 
-        # TODO: check contradictories as well.
         potential_queryables = \
             {q for q in self.queryables if q not in self.initial_axioms}
         relevant_queryables = set()
 
-        topic_not_status = clingo.Function(status, [clingo.Function(topic)])
+        topic_not_status = \
+            clingo.Function(status, [clingo.Function(self.topic)])
         topic_not_status_assumption = [(topic_not_status, False)]
 
         while True:

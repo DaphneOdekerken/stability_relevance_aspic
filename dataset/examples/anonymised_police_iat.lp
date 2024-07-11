@@ -370,9 +370,3 @@ preferred(41,41).
 preferred(42,42).
 
 topic(fraudarticle326).
-topic(fraudarticle326e).
-topic(fraudarticle326expertcheckrequired).
-topic(fraudarticle326eexpertcheckrequired).
-topic(civilcase).
-topic(rejectcomplaint).
-topic(refertohallmarkcompany).

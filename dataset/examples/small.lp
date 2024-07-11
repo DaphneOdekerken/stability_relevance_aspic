@@ -37,3 +37,5 @@ preferred(d0,d0).
 preferred(d0,d1).
 preferred(d1,d1).
 preferred(d2,d2).
+
+topic(a).
