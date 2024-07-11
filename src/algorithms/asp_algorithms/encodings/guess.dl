@@ -1,0 +1,6 @@
+% Guess axioms.
+{axiom(L)} :- queryable(L).
+naxiom(L) :- not axiom(L), queryable(L).
+
+% Axioms must be consistent.
+:- axiom(L), axiom(N), neg(N,L).

@@ -1,0 +1,6 @@
+% Preprocessing: unsatisfiable labels
+rule(R) :- head(R,_).
+derivable(L) :- axiom(L).
+derivable(L) :- head(R,L), applicable_rule(R).
+applicable_rule(R) :- rule(R), derivable(L) : body(R,L).
+unsatisfiable(L) :- not derivable(L), literal(L).

@@ -1,0 +1,40 @@
+strictly_less_preferred(X,Y) :- preferred(Y,X), not preferred(X,Y).
+not_less_preferred(X,Y) :- rule(X), rule(Y), not strictly_less_preferred(X,Y).
+
+%% Count the number of assumptions and thus number of iterations
+n_rules(N) :- #count{X : rule(X)} = N.
+max_iterations(M) :- n_rules(N), M=(N+1)/2.
+iteration(0..N) :- max_iterations(N).
+
+%% Everything derivable from rules that are in at iteration I
+defended(X,I) :- axiom(X), iteration(I).
+defended(X,I) :- head(R,X), in_rule(R,I).
+in_rule(R,I) :- iteration(I), defended_rule(R,I), rule(R), defended(X,I) : body(R,X).
+
+% Rule is not defeated by the undefeated set on last iteration, so can be in (if applicable)
+defended_rule(R,I) :- iteration(J), rule(R), not defeated_by_undefeated(R,J), J+1=I.
+
+% Rules defeated by the defended arguments at iteration I
+defeated(R,I) :- head(R,X), axiom(Y), neg(X,Y), iteration(I).
+defeated(R,I) :- head(R,X), in_rule(DR,I), head(DR,Y), neg(X,Y), not_less_preferred(DR,R).
+
+% Everything derivable from rules that are not defeated by in at iteration I
+derived_from_undefeated(X,I) :- axiom(X), iteration(I).
+derived_from_undefeated(X,I) :- head(R,X), triggered_by_undefeated(R,I).
+triggered_by_undefeated(R,I) :- iteration(I), rule(R), not defeated(R,I), derived_from_undefeated(X,I) : body(R,X).
+
+%% X is attacked by assumptions that are not attacked by in at iteration I
+defeated_by_undefeated(R,I) :- head(R,X), axiom(Y), neg(X,Y), iteration(I).
+defeated_by_undefeated(R,I) :- head(R,X), triggered_by_undefeated(IR,I), head(IR,Y), neg(X,Y), not_less_preferred(IR,R).
+
+%% X is in if it is in at the last iteration
+in_rule(R) :- in_rule(R,N), max_iterations(N).
+
+%% sentence X is in by the grounded assumption set
+defended(X) :- defended(X,N), max_iterations(N).
+
+% Out labels
+out(L) :- derivable(L), not derived_from_undefeated(L,N), max_iterations(N).
+
+% Blocked labels
+blocked(L) :- literal(L), not unsatisfiable(L), not out(L), not defended(L).

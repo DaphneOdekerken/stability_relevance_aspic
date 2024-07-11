@@ -1,0 +1,21 @@
+% Defeasible rules whose conclusion is attacked by axioms
+defeated(R) :- head(R,X), axiom(Y), neg(X,Y).
+
+% Literals undefeated by axioms
+undefeated(L) :- axiom(L).
+undefeated(L) :- head(R,L), usable_from_undefeated(R).
+usable_from_undefeated(R) :- rule(R), not defeated(R), undefeated(L) : body(R,L).
+
+% Rules whose conclusion is attacked by undefeated
+defeated_by_undefeated(R) :- head(R,X), undefeated(Y), neg(X,Y).
+
+% Defended, i.e. literals derivable using only rules not defeated by undefeated
+defended(L) :- axiom(L).
+defended(L) :- head(R,L), usable_from_defended(R).
+usable_from_defended(R) :- rule(R), not defeated_by_undefeated(R), defended(L) : body(R,L).
+
+% Out labels
+out(L) :- derivable(L), not undefeated(L).
+
+% Blocked labels
+blocked(L) :- literal(L), not unsatisfiable(L), not out(L), not defended(L).
