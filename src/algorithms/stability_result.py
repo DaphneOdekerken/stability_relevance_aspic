@@ -23,6 +23,10 @@ class StabilityResult:
                f'Out:           {self.stable_out} \n' \
                f'Blocked:       {self.stable_blocked}'
 
+    def nr_stable(self):
+        return len(self.stable_unsatisfiable) + len(self.stable_defended) + \
+            len(self.stable_out) + len(self.stable_blocked)
+
     def __eq__(self, other):
         return self.stable_unsatisfiable == other.stable_unsatisfiable and \
             self.stable_defended == other.stable_defended and \
