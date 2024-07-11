@@ -155,8 +155,8 @@ if __name__ == '__main__':
     if not RESULTS_PATH.exists():
         RESULTS_PATH.mkdir()
 
-    # for dataset in ['police', 'layered_large', 'random_large']:
-    #     run_stability_experiments(dataset)
+    for dataset in ['police', 'layered_large', 'random_large']:
+        run_stability_experiments(dataset)
 
     for dataset in ['police', 'layered_small', 'random_small']:
         run_relevance_experiments(dataset)

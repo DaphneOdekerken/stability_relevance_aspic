@@ -9,8 +9,9 @@ from src.import_export.iat_from_lp_reader import read_from_lp_file
 from src.import_export.iat_to_lp_writer import write_to_lp_file
 
 
-SMALL_NR_OF_LITERALS = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
-LARGE_NR_OF_LITERALS = [50, 100, 150, 200, 250, 500, 1000, 2500]
+SMALL_NR_OF_LITERALS = [50, 60, 70, 80, 90, 100, 110, 120]
+LARGE_NR_OF_LITERALS = [50, 100, 150, 200, 250, 500, 1000]
+NR_OF_INSTANCES = 10
 DATASET_PATH = pathlib.Path(__file__).parent.parent.parent / 'dataset'
 
 
@@ -27,7 +28,7 @@ def generate_police_dataset():
         DATASET_PATH / 'examples' / 'anonymised_police_iat.lp')
     iat = read_from_lp_file(police_example_path)
 
-    for generated_index in range(100):
+    for generated_index in range(NR_OF_INSTANCES):
         axioms = []
         axiom_candidates = iat.queryables.copy()
 
@@ -63,7 +64,7 @@ def generate_layered_dataset(small=True):
         folder_name = 'layered_large'
 
     for nr_of_literals in nr_of_literals_list:
-        for index in range(100):
+        for index in range(NR_OF_INSTANCES):
             iat, topic_literal = generate_single_layered(nr_of_literals)
             filename = 'layered_no_pref_' + str(nr_of_literals) + 'lit_' + str(
                 index) + '.lp'
@@ -82,7 +83,7 @@ def generate_random_dataset(small=True):
         folder_name = 'random_large'
 
     for nr_of_literals in nr_of_literals_list:
-        for index in range(100):
+        for index in range(NR_OF_INSTANCES):
             iat, topic_literal = generate_single_random(nr_of_literals)
             filename = 'random_no_pref_' + str(nr_of_literals) + 'lit_' + str(
                 index) + '.lp'
