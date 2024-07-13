@@ -3,6 +3,7 @@ import random
 
 from src.classes.incomplete_argumentation_theory import \
     IncompleteArgumentationTheory
+from src.experiments.run_experiments import RESULTS_PATH, run_stability_experiments, run_relevance_experiments
 from src.generators.iat_generator import \
     generate_single_layered, generate_single_random
 from src.import_export.iat_from_lp_reader import read_from_lp_file
@@ -11,7 +12,7 @@ from src.import_export.iat_to_lp_writer import write_to_lp_file
 
 SMALL_NR_OF_LITERALS = [50, 60, 70, 80, 90, 100, 110, 120]
 LARGE_NR_OF_LITERALS = [50, 100, 150, 200, 250, 500, 1000]
-NR_OF_INSTANCES = 10
+NR_OF_INSTANCES = 100
 DATASET_PATH = pathlib.Path(__file__).parent.parent.parent / 'dataset'
 
 
@@ -106,3 +107,15 @@ if __name__ == '__main__':
     print('Done with random small')
     generate_random_dataset(False)
     print('Done with random large')
+
+    if not RESULTS_PATH.exists():
+        RESULTS_PATH.mkdir()
+
+    for dataset in ['police', 'layered_large', 'random_large']:
+        run_stability_experiments(dataset)
+        print('Done with stability experiments for ' + dataset)
+
+    for dataset in ['police', 'layered_small', 'random_small']:
+        run_relevance_experiments(dataset)
+        print('Done with relevance experiments for ' + dataset)
+
